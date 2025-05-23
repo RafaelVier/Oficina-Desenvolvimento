@@ -1,7 +1,9 @@
-package com.oficina_dev.backend.Models.City;
+package com.oficina_dev.backend.Models.Donation;
 
-import com.oficina_dev.backend.Models.Address.Address;
+import com.oficina_dev.backend.Models.DonationItem.DonationItem;
+import com.oficina_dev.backend.Models.Giver.Giver;
 import com.oficina_dev.backend.Models.State.State;
+import com.oficina_dev.backend.Models.Voluntary.Voluntary;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,15 +13,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_cities", schema = "public")
-public class City {
+@Table(name = "tb_donations", schema = "public")
+public class Donation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @Column(name = "name", length = 100, nullable = false, unique = true)
-    private String name;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -29,11 +28,15 @@ public class City {
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
-    //Relacionamento muitos pra um, Fk state dentro da tabela city
     @ManyToOne
-    @JoinColumn(name = "id_state")
-    private State state;
+    @JoinColumn(name = "id_giver")
+    private Giver giver;
 
-    @OneToMany(mappedBy = "city")
-    private List<Address> addresses;
+    @ManyToOne
+    @JoinColumn(name = "id_voluntary")
+    private Voluntary voluntary;
+
+    @OneToMany(mappedBy = "donation")
+    private List<DonationItem> donationItems;
+
 }
