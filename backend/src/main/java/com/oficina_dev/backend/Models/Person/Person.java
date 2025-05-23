@@ -29,10 +29,10 @@ public class Person {
     @Column(name = "phone", length = 15, nullable = false)
     private String phone;
 
-    @EmbeddedId
+    @Embedded
     private Cpf cpf;
 
-    @EmbeddedId
+    @Embedded
     private Email email;
 
     @CreationTimestamp
