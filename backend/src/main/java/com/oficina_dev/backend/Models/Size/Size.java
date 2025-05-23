@@ -1,19 +1,17 @@
-package com.oficina_dev.backend.Models.State;
+package com.oficina_dev.backend.Models.Size;
 
-import com.oficina_dev.backend.Models.City.City;
+
+import com.oficina_dev.backend.Models.Item.Item;
 import jakarta.persistence.*;
-
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_states", schema = "public")
-public class State {
+@Table(name = "tb_sizes", schema = "public")
+public class Size {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,17 +20,14 @@ public class State {
     @Column(name = "name", length = 100, nullable = false, unique = true)
     private String name;
 
-    @Column(name = "abbreviation", length = 2, nullable = false, unique = true)
-    private String abbreviation;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private ZonedDateTime createdAt;
 
-    @UpdateTimestamp
+    @CreationTimestamp
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
-    @OneToMany(mappedBy = "state")
-    private List<City> cities;
+    @OneToMany(mappedBy = "size")
+    private List<Item> items;
 }
