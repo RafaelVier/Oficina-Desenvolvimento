@@ -1,6 +1,6 @@
-package com.oficina_dev.backend.Repository.Address;
+package com.oficina_dev.backend.repositories;
 
-import com.oficina_dev.backend.Models.Address.Address;
+import com.oficina_dev.backend.models.Address.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

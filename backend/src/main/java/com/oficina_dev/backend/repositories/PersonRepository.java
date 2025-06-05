@@ -1,6 +1,6 @@
-package com.oficina_dev.backend.Repository.Person;
+package com.oficina_dev.backend.repositories;
 
-import com.oficina_dev.backend.Models.Person.Person;
+import com.oficina_dev.backend.models.Person.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

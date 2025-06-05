@@ -1,6 +1,6 @@
-package com.oficina_dev.backend.Repository.Limit;
+package com.oficina_dev.backend.repositories;
 
-import com.oficina_dev.backend.Models.Limit.Limit;
+import com.oficina_dev.backend.models.Limit.Limit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

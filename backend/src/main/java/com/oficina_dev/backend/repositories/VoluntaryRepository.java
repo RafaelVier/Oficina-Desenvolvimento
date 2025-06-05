@@ -1,6 +1,6 @@
-package com.oficina_dev.backend.Repository.Voluntary;
+package com.oficina_dev.backend.repositories;
 
-import com.oficina_dev.backend.Models.Voluntary.Voluntary;
+import com.oficina_dev.backend.models.Voluntary.Voluntary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

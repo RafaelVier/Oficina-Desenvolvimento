@@ -1,6 +1,6 @@
-package com.oficina_dev.backend.Repository.State;
+package com.oficina_dev.backend.repositories;
 
-import com.oficina_dev.backend.Models.State.State;
+import com.oficina_dev.backend.models.State.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
