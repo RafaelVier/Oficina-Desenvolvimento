@@ -1,7 +1,7 @@
 package com.oficina_dev.backend.configs;
 
 import com.oficina_dev.backend.models.State.State;
-import com.oficina_dev.backend.Repositories.State.StateRepository;
+import com.oficina_dev.backend.repositories.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
