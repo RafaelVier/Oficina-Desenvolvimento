@@ -7,12 +7,14 @@ import com.oficina_dev.backend.models.Giver.Giver;
 import com.oficina_dev.backend.models.Receiver.Receiver;
 import com.oficina_dev.backend.models.Voluntary.Voluntary;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@Getter
 @Entity
 @Table(name = "tb_people", schema = "Public")
 public class Person {
@@ -54,4 +56,64 @@ public class Person {
     @OneToOne(mappedBy = "person")
     private Receiver receiver;
 
+    public Person(){
+        // Default constructor for JPA
+        this.cpf = new Cpf();
+        this.email = new Email();
+    }
+
+    public Person(String name, String phone, String cpf, String email, Address address) {
+        this.setName(name);
+        this.setPhone(phone);
+        this.cpf = new Cpf();
+        this.email = new Email();
+        this.setCpf(cpf);
+        this.setEmail(email);
+        this.setAddress(address);
+    }
+
+    public String getCpf() {
+        return cpf.getCpf();
+    }
+
+    public String getEmail() {
+        return email.getEmail();
+    }
+
+    public void setName(String name) {
+        this.name = name.toLowerCase().trim();
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone.replaceAll("[()\\-\\s]", ""); // Remove all non-digit characters
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf.setCpf(cpf);
+    }
+
+    public void setEmail(String email) {
+        this.email.setEmail(email);
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", cpf=" + cpf +
+                ", email=" + email +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", address=" + address +
+                ", giver=" + giver +
+                ", voluntary=" + voluntary +
+                ", receiver=" + receiver +
+                '}';
+    }
 }
