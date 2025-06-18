@@ -3,9 +3,11 @@ package com.oficina_dev.backend.models.Cpf;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Embeddable
+@NoArgsConstructor
 public class Cpf {
 
     @Column(name = "cpf", length = 11)
@@ -13,10 +15,6 @@ public class Cpf {
 
     public Cpf(String cpf) {
         this.setCpf(cpf);
-    }
-
-    public Cpf() {
-        // Default constructor for JPA
     }
 
     public void setCpf(String cpf) {

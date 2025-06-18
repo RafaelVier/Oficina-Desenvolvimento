@@ -4,6 +4,8 @@ import com.oficina_dev.backend.models.Donation.Donation;
 import com.oficina_dev.backend.models.Person.Person;
 import com.oficina_dev.backend.models.TransferDonation.TransferDonation;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +13,9 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "tb_voluntaries")
 public class Voluntary {
 
@@ -42,4 +46,22 @@ public class Voluntary {
 
     @OneToMany(mappedBy = "voluntary")
     private List<TransferDonation> transferDonations;
+
+    public Voluntary(Person person, String password, Boolean isActive) {
+        this.setPassword(password);
+        this.isActive = isActive;
+        this.person = person;
+    }
+
+    public void setPassword(String password) {
+        if(password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Password cannot be null or blank");
+        }
+        this.password = password;
+    }
+
+    public void setActive(boolean b) {
+        this.isActive = b;
+    }
+
 }

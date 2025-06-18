@@ -6,4 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface ReceiverRepository extends JpaRepository<Receiver, UUID> {
+
+    boolean existsByNif(String nif);
+
+    boolean existsByNifAndIdNot(String nif, UUID id);
+
 }

@@ -24,7 +24,7 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<PersonResponseDto>> getAll() {
         logger.info("Fetching all people");
         List<PersonResponseDto> personList = this.personService.getAll();

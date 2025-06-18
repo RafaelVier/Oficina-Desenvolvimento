@@ -4,6 +4,7 @@ import com.oficina_dev.backend.dtos.Person.PersonRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Person.PersonRequestDto;
 import com.oficina_dev.backend.dtos.Person.PersonRequestPatchDto;
 import com.oficina_dev.backend.dtos.Person.PersonResponseDto;
+import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.PersonMapper;
 import com.oficina_dev.backend.models.Person.Person;
 import com.oficina_dev.backend.repositories.PersonRepository;
@@ -56,11 +57,11 @@ public class PersonService {
     public PersonResponseDto create(PersonRequestDto personRequestDto) {
         logger.debug("Service: Creating new person: {}", personRequestDto.getName());
         Person person = this.personMapper.toEntity(personRequestDto);
-        // Exemplo de verificação de existência, ajuste conforme necessário
-        // if(this.personRepository.existsByCpf(person.getCpf())) {
-        //     logger.warn("Attempt to create person with duplicate CPF: {}", person.getCpf());
-        //     throw new EntityAlreadyExists("Person already exists");
-        // }
+
+        if(this.personRepository.existsByCpf(person.getCpf())) {
+             logger.warn("Attempt to create person with duplicate CPF: {}", person.getCpf());
+             throw new EntityAlreadyExists("Person already exists");
+        }
         try {
             Person savedPerson = this.personRepository.saveAndFlush(person);
             logger.info("Person created successfully: {} (ID: {})", savedPerson.getName(), savedPerson.getId());

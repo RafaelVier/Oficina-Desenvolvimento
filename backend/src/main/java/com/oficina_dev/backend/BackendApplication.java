@@ -23,7 +23,7 @@ public class BackendApplication {
 		var context = SpringApplication.run(BackendApplication.class, args);
 		Environment env = context.getEnvironment();
 		String port = env.getProperty("server.port");
-		String profile = env.getActiveProfiles().length > 0 ? env.getActiveProfiles()[0] : "default";
+		String profile = env.getActiveProfiles().length > 0 ? env.getActiveProfiles()[0] : "8080 (default value)";
 
 		logger.info("Application initialized successfully using profile: {}", profile);
 		logger.info("Application available at: http://localhost:{}", port);

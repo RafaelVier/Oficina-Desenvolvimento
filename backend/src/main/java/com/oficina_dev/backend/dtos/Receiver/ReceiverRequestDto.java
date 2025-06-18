@@ -1,20 +1,24 @@
 package com.oficina_dev.backend.dtos.Receiver;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReceiverRequestDto {
 
-    @NotBlank
-    UUID personId;
+    @NotNull
+    private UUID personId;
 
-    @NotBlank
-    String password;
+    @NotNull
+    private Boolean isFit;
 
-    @NotBlank
-    Boolean isFit;
-
-    String nif;
-
+    private String nif;
 }

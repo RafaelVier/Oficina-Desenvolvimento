@@ -20,7 +20,7 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<AddressResponseDto>> getAll() {
         List<AddressResponseDto> addressList = this.addressService.getAll();
         return ResponseEntity.ok(addressList);
@@ -32,7 +32,7 @@ public class AddressController {
         return ResponseEntity.ok(addressResponseDto);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<AddressResponseDto> create(@RequestBody @Valid AddressRequestDto addressRequestDto) {
         AddressResponseDto addressResponseDto = this.addressService.create(addressRequestDto);
         return ResponseEntity.ok(addressResponseDto);

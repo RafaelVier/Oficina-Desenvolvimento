@@ -3,6 +3,7 @@ package com.oficina_dev.backend.models.Address;
 import com.oficina_dev.backend.models.Person.Person;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "tb_address", schema = "public")
 public class Address {
 
@@ -60,9 +62,6 @@ public class Address {
         this.setReferencePoint(referencePoint);
     }
 
-    public Address() {
-        // Default constructor for JPA
-    }
     public void setNumber(Integer number) {
         if (!isValidNumber(number)) {
             throw new IllegalArgumentException("Invalid address number");

@@ -8,6 +8,7 @@ import com.oficina_dev.backend.models.Receiver.Receiver;
 import com.oficina_dev.backend.models.Voluntary.Voluntary;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -43,6 +44,7 @@ public class Person {
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "id_address", referencedColumnName = "id")
     private Address address;
@@ -94,10 +96,6 @@ public class Person {
 
     public void setEmail(String email) {
         this.email.setEmail(email);
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     @Override
