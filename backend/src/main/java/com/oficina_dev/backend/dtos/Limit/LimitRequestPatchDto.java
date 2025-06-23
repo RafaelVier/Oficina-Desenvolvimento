@@ -10,5 +10,5 @@ import lombok.Setter;
 public class LimitRequestPatchDto {
     private int month;
     private int year;
-    private int limitQuantity;
+    private Integer limitQuantity;
 }

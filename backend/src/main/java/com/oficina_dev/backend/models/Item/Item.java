@@ -6,6 +6,8 @@ import com.oficina_dev.backend.models.DonationItem.DonationItem;
 import com.oficina_dev.backend.models.Size.Size;
 import com.oficina_dev.backend.models.TransferDonationItem.TransferDonationItem;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,7 +15,9 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "tb_items", schema = "public")
 public class Item {
 
@@ -25,7 +29,7 @@ public class Item {
     private String name;
 
     @Column(name = "sex", length = 1, nullable = false)
-    private String sex;
+    private char sex;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -48,4 +52,24 @@ public class Item {
 
     @OneToMany(mappedBy = "item")
     private List<TransferDonationItem> transferDonationItems;
+
+    public Item(String name, char sex, Category category, Size size) {
+        this.setName(name);
+        this.setSex(sex);
+
+    }
+
+    public void setSex(char sex) {
+        char validSex = Character.toLowerCase(sex);
+        if (validSex != 'm' && validSex != 'f') {
+            throw new IllegalArgumentException("Sex must be 'm' or 'f'");
+        }
+        this.sex = validSex;
+    }
+
+    public void setName(String name) {
+        this.name = name.toLowerCase().trim();
+    }
+
+
 }

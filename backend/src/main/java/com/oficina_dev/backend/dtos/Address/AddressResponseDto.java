@@ -1,9 +1,13 @@
 package com.oficina_dev.backend.dtos.Address;
 
 
-import com.oficina_dev.backend.dtos.State.StateResponseDto;
+import java.util.UUID;
 
 public record AddressResponseDto(
-        String name,
-        StateResponseDto state
+        UUID id,
+        int number,
+        String street,
+        String neighborhood,
+        String complement,
+        String referencePoint
 ) { }
