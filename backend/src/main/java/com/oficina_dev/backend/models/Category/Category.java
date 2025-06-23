@@ -3,6 +3,7 @@ package com.oficina_dev.backend.models.Category;
 
 import com.oficina_dev.backend.models.Item.Item;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 @Entity
 @Table(name = "tb_categories", schema = "public")
 public class Category {
