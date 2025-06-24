@@ -29,6 +29,17 @@ const CadastroDoador = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    
+    // Limpa o CPF para garantir que só vai número
+    const cpfLimpo = form.cpf.replace(/\D/g, "");
+    
+    // Se CPF foi preenchido, validar formato
+    if (cpfLimpo.length > 0 && cpfLimpo.length !== 11) {
+      setError("CPF deve conter 11 dígitos numéricos.");
+      setLoading(false);
+      return;
+    }
+    
     try {
       // Montar objeto de endereço (sem id, não é array)
       const address = {
@@ -55,19 +66,13 @@ const CadastroDoador = () => {
       console.log("[DEBUG] addressRes body:", addressData);
       if (!addressRes.ok) throw new Error("Erro ao cadastrar endereço: " + JSON.stringify(addressData));
       const addressId = addressData.id;
-      // Limpa o CPF para garantir que só vai número
-      const cpfLimpo = form.cpf.replace(/\D/g, "");
-      if (cpfLimpo.length !== 11) {
-        setError("CPF deve conter 11 dígitos numéricos.");
-        setLoading(false);
-        return;
-      }
+      
       // Montar objeto pessoa
       const pessoa = {
         name: form.nomeCompleto,
         phone: form.telefoneCelular,
         email: form.email,
-        cpf: cpfLimpo,
+        cpf: cpfLimpo.length > 0 ? cpfLimpo : null,
         idAddress: addressId
       };
       console.log("[DEBUG] pessoa enviada:", pessoa);
@@ -81,6 +86,22 @@ const CadastroDoador = () => {
       console.log("[DEBUG] peopleRes status:", peopleRes.status);
       console.log("[DEBUG] peopleRes body:", peopleData);
       if (!peopleRes.ok) throw new Error("Erro ao cadastrar pessoa: " + JSON.stringify(peopleData));
+      
+      // POST para /api/givers usando o personId
+      const giver = {
+        personId: peopleData.id
+      };
+      console.log("[DEBUG] giver enviado:", giver);
+      const giverRes = await fetch("http://localhost:8080/api/givers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(giver)
+      });
+      const giverData = await giverRes.json();
+      console.log("[DEBUG] giverRes status:", giverRes.status);
+      console.log("[DEBUG] giverRes body:", giverData);
+      if (!giverRes.ok) throw new Error("Erro ao cadastrar doador: " + JSON.stringify(giverData));
+      
       router.push("/sucesso");
     } catch (err) {
       setError(err.message || "Erro ao cadastrar");
@@ -106,7 +127,7 @@ const CadastroDoador = () => {
           <label><b>E-mail*</b><br/>
             <input name="email" value={form.email} onChange={handleChange} required style={{width: "100%", marginBottom: 16, padding: 8, borderRadius: 6, border: "2px solid #2d253c"}} placeholder="fulano@gmail.com" />
           </label>
-          <label><b>CPF*</b><br/>
+          <label><b>CPF (opcional)</b><br/>
             <input
               name="cpf"
               type="text"
@@ -118,7 +139,6 @@ const CadastroDoador = () => {
                 const onlyNums = e.target.value.replace(/\D/g, "");
                 setForm({ ...form, cpf: onlyNums });
               }}
-              required
               style={{width: "100%", marginBottom: 16, padding: 8, borderRadius: 6, border: "2px solid #2d253c"}}
               placeholder="11122233355"
             />
