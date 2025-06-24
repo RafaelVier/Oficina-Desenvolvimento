@@ -72,4 +72,11 @@ public class Item {
     }
 
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 public record ItemResponseDto(
         UUID id,
         String name,
-        SizeResponseDto size,
-        CategoryResponseDto category
+        char sex,
+        CategoryResponseDto category,
+        SizeResponseDto size
 ) { }
