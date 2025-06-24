@@ -58,10 +58,6 @@ public class PersonService {
         logger.debug("Service: Creating new person: {}", personRequestDto.getName());
         Person person = this.personMapper.toEntity(personRequestDto);
 
-        if(this.personRepository.existsByCpf(person.getCpf())) {
-             logger.warn("Attempt to create person with duplicate CPF: {}", person.getCpf());
-             throw new EntityAlreadyExists("Person already exists");
-        }
         try {
             Person savedPerson = this.personRepository.saveAndFlush(person);
             logger.info("Person created successfully: {} (ID: {})", savedPerson.getName(), savedPerson.getId());

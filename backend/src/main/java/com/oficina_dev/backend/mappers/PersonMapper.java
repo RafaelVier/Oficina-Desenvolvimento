@@ -37,14 +37,11 @@ public class PersonMapper {
     }
 
     public Person toEntity(PersonRequestDto dto) {
-        Person person = new Person();
-        person.setName(dto.getName());
-        person.setPhone(dto.getPhone());
-        person.setEmail(dto.getEmail());
-        person.setCpf(dto.getCpf());
         Address address = addressService.findById(dto.getIdAddress());
-        person.setAddress(address);
-        return person;
+        return new Person(
+                dto.getName(), dto.getPhone(),
+                dto.getCpf(), dto.getEmail(), address
+        );
     }
 
     public void update(Person person, PersonRequestDto dto) {

@@ -46,7 +46,7 @@ public class Person {
 
     @Setter
     @OneToOne
-    @JoinColumn(name = "id_address", referencedColumnName = "id")
+    @JoinColumn(name = "id_address", referencedColumnName = "id", unique = true)
     private Address address;
 
     @OneToOne(mappedBy = "person")
@@ -60,17 +60,13 @@ public class Person {
 
     public Person(){
         // Default constructor for JPA
-        this.cpf = new Cpf();
-        this.email = new Email();
     }
 
     public Person(String name, String phone, String cpf, String email, Address address) {
         this.setName(name);
         this.setPhone(phone);
-        this.cpf = new Cpf();
-        this.email = new Email();
-        this.setCpf(cpf);
-        this.setEmail(email);
+        this.cpf = new Cpf(cpf);
+        this.email = new Email(email);
         this.setAddress(address);
     }
 
