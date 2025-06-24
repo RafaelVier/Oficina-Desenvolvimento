@@ -1,0 +1,25 @@
+.container {
+  min-height: 100vh;
+  background: #f5f6fa;
+  margin-left: 220px; /* largura do Navigation */
+}
+
+.main {
+  padding-top: 72px; /* altura do MenuBar */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: #444;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #444;
+}
