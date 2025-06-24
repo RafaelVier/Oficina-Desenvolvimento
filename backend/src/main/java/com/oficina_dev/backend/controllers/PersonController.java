@@ -40,7 +40,7 @@ public class PersonController {
         return ResponseEntity.ok(personResponseDto);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<PersonResponseDto> create(@RequestBody @Valid PersonRequestDto personRequestDto) {
         logger.info("Creating new person: {}", personRequestDto.getName());
         PersonResponseDto personResponseDto = this.personService.create(personRequestDto);
