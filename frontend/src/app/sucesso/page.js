@@ -1,7 +1,17 @@
+'use client';
 import Navigation from '../components/navegation/navegation';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Sucesso() {
+  const router = useRouter();
+  const params = useSearchParams();
+  const tipo = params.get('tipo');
+  let destino = '/home';
+  if (tipo === 'doadores') destino = '/cadastrodoador/lista';
+  if (tipo === 'beneficiarios') destino = '/cadastrobeneficiario/lista';
+  if (tipo === 'voluntarios') destino = '/cadastrovoluntario/lista';
   return (
     <div style={{
       minHeight: "100vh",
@@ -18,9 +28,10 @@ export default function Sucesso() {
         justifyContent: "center",
         width: "100%"
       }}>
+        <Image src="/doantion.jpg" alt="Sucesso" width={180} height={120} style={{ borderRadius: 12, marginBottom: 24, boxShadow: '0 2px 8px rgba(25,118,210,0.10)' }} />
         <div style={{
           background: "#fff",
-          padding: "48px 64px",
+          padding: "32px 32px",
           borderRadius: "20px",
           border: "1.5px solid #e5e7eb",
           fontSize: "2rem",
@@ -32,7 +43,7 @@ export default function Sucesso() {
         }}>
           Cadastro feito com sucesso!
         </div>
-        <Link href="/home" style={{
+        <button onClick={() => router.push(destino)} style={{
           display: "inline-block",
           background: "#1976d2",
           color: "#fff",
@@ -43,10 +54,12 @@ export default function Sucesso() {
           textDecoration: "none",
           boxShadow: "0 2px 8px rgba(25, 118, 210, 0.08)",
           transition: "background 0.2s",
-          marginTop: 8
+          marginTop: 8,
+          border: 'none',
+          cursor: 'pointer'
         }}>
-          Voltar ao Menu
-        </Link>
+          Ir para a lista
+        </button>
       </div>
     </div>
   );
