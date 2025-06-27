@@ -4,6 +4,7 @@ import com.oficina_dev.backend.models.Person.Person;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Table(name = "tb_address", schema = "public")
 public class Address {
 
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -99,4 +101,5 @@ public class Address {
                 ", person=" + person +
                 '}';
     }
+
 }

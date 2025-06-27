@@ -15,7 +15,9 @@ public class ItemRequestPatchDto {
     @Size(min = 3, max = 100)
     private String name;
 
-    private char sex;
+    private Character sex;
+
+    private Integer quantity;
 
     private UUID categoryId;
 

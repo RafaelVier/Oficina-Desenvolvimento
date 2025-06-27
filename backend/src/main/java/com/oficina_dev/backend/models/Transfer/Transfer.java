@@ -1,7 +1,7 @@
-package com.oficina_dev.backend.models.TransferDonation;
+package com.oficina_dev.backend.models.Transfer;
 
 import com.oficina_dev.backend.models.Receiver.Receiver;
-import com.oficina_dev.backend.models.TransferDonationItem.TransferDonationItem;
+import com.oficina_dev.backend.models.TransferItem.TransferItem;
 import com.oficina_dev.backend.models.Voluntary.Voluntary;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @Table(name = "tb_transfers", schema = "public")
-public class TransferDonation {
+public class Transfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,17 +40,17 @@ public class TransferDonation {
     @JoinColumn(name = "id_voluntary")
     private Voluntary voluntary;
 
-    @OneToMany(mappedBy = "transferDonation")
-    private List<TransferDonationItem> transferDonationItems;
+    @OneToMany(mappedBy = "transfer")
+    private List<TransferItem> transferItems;
 
-    public TransferDonation(Receiver receiver, Voluntary voluntary) {
+    public Transfer(Receiver receiver, Voluntary voluntary) {
         this.receiver = receiver;
         this.voluntary = voluntary;
-        this.transferDonationItems = new ArrayList<>();
+        this.transferItems = new ArrayList<>();
     }
 
-    public void addTransferDonationItem(TransferDonationItem item) {
-        item.setTransferDonation(this);
-        this.transferDonationItems.add(item);
+    public void addTransferDonationItem(TransferItem item) {
+        item.setTransfer(this);
+        this.transferItems.add(item);
     }
 }

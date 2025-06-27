@@ -21,11 +21,13 @@ public class ItemMapper {
 
     @Autowired
     private CategoryService categoryService;
+
     @Autowired
     private SizeService sizeService;
 
     @Autowired
     private CategoryMapper categoryMapper;
+
     @Autowired
     private SizeMapper sizeMapper;
 
@@ -38,6 +40,7 @@ public class ItemMapper {
         return new ItemResponseDto(
                 item.getId(),
                 item.getName(),
+                item.getQuantity(),
                 item.getSex(),
                 categoryDto,
                 sizeDto
@@ -45,22 +48,19 @@ public class ItemMapper {
     }
 
     public Item toEntity(ItemRequestDto dto) {
-        Item item = new Item();
-        item.setName(dto.getName());
-        item.setSex(dto.getSex());
         Category category = categoryService.findById(dto.getCategoryId());
-        item.setCategory(category);
         Size size = sizeService.findById(dto.getSizeId());
-        item.setSize(size);
-        return item;
+        return new Item(dto.getName(), dto.getQuantity(),
+                        dto.getSex(), category, size);
     }
 
     public void update(Item item, ItemRequestDto dto) {
+        Category category = categoryService.findById(dto.getCategoryId());
+        Size size = sizeService.findById(dto.getSizeId());
         item.setName(dto.getName());
         item.setSex(dto.getSex());
-        Category category = categoryService.findById(dto.getCategoryId());
+        item.setQuantity(dto.getQuantity());
         item.setCategory(category);
-        Size size = sizeService.findById(dto.getSizeId());
         item.setSize(size);
     }
 
@@ -68,9 +68,24 @@ public class ItemMapper {
         if (dto.getName() != null) {
             item.setName(dto.getName());
         }
-        if (Character.valueOf(dto.getSex()) != null) {
+        if (dto.getSex() != null) {
             item.setSex(dto.getSex());
         }
+
+        if(dto.getQuantity() != null) {
+            item.setQuantity(dto.getQuantity());
+        }
+
+        if (dto.getCategoryId() != null) {
+            Category category = categoryService.findById(dto.getCategoryId());
+            item.setCategory(category);
+        }
+
+        if (dto.getSizeId() != null) {
+            Size size = sizeService.findById(dto.getSizeId());
+            item.setSize(size);
+        }
+
     }
 
     public ItemRemovedResponseDto toRemovedResponse(Item item) {
