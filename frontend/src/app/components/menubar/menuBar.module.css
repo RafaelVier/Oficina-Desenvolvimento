@@ -1,5 +1,6 @@
 .menuBar {
-  width: 100%;
+  width: calc(100% - 220px);
+  margin-left: 220px;
   height: 56px;
   background: #fff;
   display: flex;
@@ -7,7 +8,9 @@
   justify-content: flex-end;
   box-shadow: 0 1px 0 #ececec;
   position: relative;
-  z-index: 200;
+  z-index: 50;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .rightSection {

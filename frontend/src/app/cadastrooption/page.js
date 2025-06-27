@@ -18,34 +18,33 @@ export default function Cadastrooption() {
   };
 
   return (
-    <>
-      <div className={styles.container}>
-        <Navigation />
-        <div className={styles.contentArea}>
-          <MenuBar hasNotification={hasNotification} />
-          <main className={styles.main}>
-            <div className={styles.centerBox}>
-              <p className={styles.title}>Selecione o tipo de cadastro</p>
-              <div className={styles.radioGroup}>
-                <label className={styles.radioLabel}>
-                  <input type="radio" className={styles.radioInput} name="tipo" value="doador" checked={selected === 'doador'} onChange={() => setSelected('doador')} />
-                  <span className={styles.radioText}><b>Doador</b></span>
-                </label>
-                <label className={styles.radioLabel}>
-                  <input type="radio" className={styles.radioInput} name="tipo" value="beneficiario" checked={selected === 'beneficiario'} onChange={() => setSelected('beneficiario')} />
-                  <span className={styles.radioText}><b>Beneficiário</b></span>
-                </label>
-                <label className={styles.radioLabel}>
-                  <input type="radio" className={styles.radioInput} name="tipo" value="voluntario" checked={selected === 'voluntario'} onChange={() => setSelected('voluntario')} />
-                  <span className={styles.radioText}><b>Voluntário</b></span>
-                </label>
-              </div>
-              <button className={styles.button} onClick={handleAvancar}>Avançar</button>
+    <div className={styles.containerGeral}>
+      <Navigation />
+      <div className={styles.contentWrapper}>
+        <MenuBar hasNotification={hasNotification} />
+        <main className={styles.main}>
+          <div className={styles.boxCadastro}>
+            <h1 className={styles.titulo}>Selecione o tipo de cadastro</h1>
+            <div className={styles.decoracao}></div>
+            <div className={styles.radioGroup}>
+              <label className={styles.radioLabel}>
+                <input type="radio" className={styles.radioInput} name="tipo" value="doador" checked={selected === 'doador'} onChange={() => setSelected('doador')} />
+                <span className={styles.radioText}><b>Doador</b></span>
+              </label>
+              <label className={styles.radioLabel}>
+                <input type="radio" className={styles.radioInput} name="tipo" value="beneficiario" checked={selected === 'beneficiario'} onChange={() => setSelected('beneficiario')} />
+                <span className={styles.radioText}><b>Beneficiário</b></span>
+              </label>
+              <label className={styles.radioLabel}>
+                <input type="radio" className={styles.radioInput} name="tipo" value="voluntario" checked={selected === 'voluntario'} onChange={() => setSelected('voluntario')} />
+                <span className={styles.radioText}><b>Voluntário</b></span>
+              </label>
             </div>
-          </main>
-        </div>
+            <button className={styles.buttonAvancar} onClick={handleAvancar}>Avançar</button>
+          </div>
+        </main>
       </div>
-    </>
+    </div>
   );
 } 
 
