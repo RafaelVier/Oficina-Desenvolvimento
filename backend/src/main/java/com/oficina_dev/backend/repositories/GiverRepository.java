@@ -1,6 +1,6 @@
 package com.oficina_dev.backend.repositories;
 
-import com.oficina_dev.backend.models.Giver.Giver;
+import com.oficina_dev.backend.models.Giver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

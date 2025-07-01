@@ -1,9 +1,8 @@
 package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Limit.LimitRequestDto;
-import com.oficina_dev.backend.dtos.Limit.LimitRequestPatchDto;
 import com.oficina_dev.backend.dtos.Limit.LimitResponseDto;
-import com.oficina_dev.backend.models.Limit.Limit;
+import com.oficina_dev.backend.models.Limit;
 import org.springframework.stereotype.Component;
 
 @Component

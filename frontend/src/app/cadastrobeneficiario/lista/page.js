@@ -2,50 +2,83 @@
 import React, { useEffect, useState } from "react";
 import MenuBar from "../../components/menubar/menubar";
 import Navigation from "../../components/navegation/navegation";
-// Importar o CSS Modules específico para a lista
 import styles from "./lista.module.css";
-// Se você mantiver o formContainer no styles de cadastrobeneficiario, importe-o também
-// import formStyles from "../cadastrobeneficiario.module.css";
 import { useRouter } from "next/navigation";
 import modalStyles from "./lista.module.css";
+import beneficiarioService from "../../../services/beneficiarioService";
 
 export default function ListaBeneficiarios() {
-  const [beneficiarios, setBeneficiarios] = useState([]); // [{id, nomeCompleto, email, telefoneCelular, nif, ...}]
+  const [beneficiarios, setBeneficiarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editForm, setEditForm] = useState(null); // objeto do beneficiário a editar
+  const [editForm, setEditForm] = useState(null);
   const [editError, setEditError] = useState("");
   const [editLoading, setEditLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    setError("");
-    try {
-      const mock = JSON.parse(localStorage.getItem('mockBeneficiarios') || '[]');
-      setBeneficiarios(mock);
-    } catch (err) {
-      setError("Erro ao carregar beneficiários do mock");
-    } finally {
-      setLoading(false);
-    }
+    const carregarBeneficiarios = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const dados = await beneficiarioService.listarBeneficiarios();
+        setBeneficiarios(dados);
+      } catch (err) {
+        console.error("Erro ao carregar beneficiários:", err);
+
+        let mensagemErro = "Erro ao carregar beneficiários";
+        if (err.response?.status >= 500) {
+          mensagemErro = "Servidor indisponível. Tente novamente mais tarde.";
+        } else if (err.response?.status === 404) {
+          mensagemErro =
+            "Endpoint não encontrado. Verifique a configuração da API.";
+        }
+
+        setError(mensagemErro);
+
+        /* === FALLBACK PARA MOCK EM CASO DE ERRO ===
+        try {
+          const mock = JSON.parse(localStorage.getItem('mockBeneficiarios') || '[]');
+          setBeneficiarios(mock);
+          setError("Carregando dados do mock local (API indisponível)");
+        } catch (mockErr) {
+          setError("Erro ao carregar beneficiários do mock e da API");
+        }
+        === FIM DO FALLBACK === */
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    carregarBeneficiarios();
   }, []);
 
   const handleEdit = (id) => {
     router.push(`/cadastrobeneficiario/editar/${id}`);
   };
 
-  const handleDelete = (id) => {
-    if (!window.confirm("Tem certeza que deseja excluir este beneficiário?")) return;
+  const handleDelete = async (id) => {
+    if (!window.confirm("Tem certeza que deseja excluir este beneficiário?"))
+      return;
     setLoading(true);
     setError("");
     try {
+      await beneficiarioService.excluirBeneficiario(id);
+
+      // Recarregar a lista após exclusão
+      const dados = await beneficiarioService.listarBeneficiarios();
+      setBeneficiarios(dados);
+
+      alert("Beneficiário excluído com sucesso!");
+
+      /* === CÓDIGO MOCK COMENTADO PARA REFERÊNCIA ===
       const novos = beneficiarios.filter((b) => b.id !== id);
       setBeneficiarios(novos);
       localStorage.setItem('mockBeneficiarios', JSON.stringify(novos));
-      alert("Beneficiário excluído com sucesso!");
+      === FIM DO CÓDIGO MOCK === */
     } catch (err) {
+      console.error("Erro ao excluir beneficiário:", err);
       setError("Erro ao excluir beneficiário");
     } finally {
       setLoading(false);
@@ -53,27 +86,49 @@ export default function ListaBeneficiarios() {
   };
 
   const openEditModal = (beneficiario) => {
-    setEditForm({ ...beneficiario });
+    // Preparar dados para edição, considerando a estrutura da API (ReceiverResponseDto)
+    const dadosParaEdicao = {
+      id: beneficiario.id,
+      nomeCompleto: beneficiario.person?.name || "", // Campo correto da API
+      telefoneCelular: beneficiario.person?.phone || "",
+      email: beneficiario.person?.email || "",
+      cpfCrnm: beneficiario.person?.cpf || "", // Campo correto da API
+      nif: beneficiario.nif || "",
+      endereco: beneficiario.person?.address?.street || "",
+      bairro: beneficiario.person?.address?.neighborhood || "",
+      numero: beneficiario.person?.address?.number?.toString() || "",
+      complemento: beneficiario.person?.address?.complement || "",
+      pontoReferencia: beneficiario.person?.address?.referencePoint || "",
+      isFit: beneficiario.isFit,
+    };
+
+    setEditForm(dadosParaEdicao);
     setEditModalOpen(true);
     setEditError("");
   };
+
   const closeEditModal = () => {
     setEditModalOpen(false);
     setEditForm(null);
     setEditError("");
   };
+
   const handleEditChange = (e) => {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
-  const handleEditSubmit = (e) => {
+
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
     setEditLoading(true);
     setEditError("");
+
     // Validação: pelo menos um dos campos (CPF/CRNM ou NIF) deve ser preenchido
     const cpfCrnmLimpo = editForm.cpfCrnm.replace(/\D/g, "");
     const nifLimpo = editForm.nif.replace(/\D/g, "");
     if (cpfCrnmLimpo.length === 0 && nifLimpo.length === 0) {
-      setEditError("É obrigatório preencher pelo menos um dos campos: CPF/CRNM ou NIF.");
+      setEditError(
+        "É obrigatório preencher pelo menos um dos campos: CPF/CRNM ou NIF."
+      );
       setEditLoading(false);
       return;
     }
@@ -85,7 +140,9 @@ export default function ListaBeneficiarios() {
     // Validação de telefone (aceita ambos formatos)
     const telefoneLimpo = editForm.telefoneCelular.replace(/\D/g, "");
     if (telefoneLimpo.length < 10 || telefoneLimpo.length > 11) {
-      setEditError("Telefone deve conter entre 10 e 11 dígitos (incluindo DDD).");
+      setEditError(
+        "Telefone deve conter entre 10 e 11 dígitos (incluindo DDD)."
+      );
       setEditLoading(false);
       return;
     }
@@ -94,14 +151,58 @@ export default function ListaBeneficiarios() {
       setEditLoading(false);
       return;
     }
+
     try {
+      // Preparar dados para envio à API
+      const dadosParaAtualizar = {
+        nomeCompleto: editForm.nomeCompleto.trim(),
+        telefoneCelular: editForm.telefoneCelular.trim(),
+        email: editForm.email.trim(),
+        cpfCrnm: cpfCrnmLimpo,
+        nif: nifLimpo || null,
+        endereco: editForm.endereco.trim(),
+        bairro: editForm.bairro.trim(),
+        numero: editForm.numero.toString(),
+        complemento: editForm.complemento.trim() || "N/A", // Backend exige campo não vazio
+        pontoReferencia: editForm.pontoReferencia.trim() || "N/A", // Backend exige campo não vazio
+        isFit: editForm.isFit,
+      };
+
+      console.log("Atualizando beneficiário:", dadosParaAtualizar);
+
+      await beneficiarioService.atualizarBeneficiarioCompleto(
+        editForm.id,
+        dadosParaAtualizar
+      );
+
+      // Recarregar a lista após edição
+      const dados = await beneficiarioService.listarBeneficiarios();
+      setBeneficiarios(dados);
+
+      setEditModalOpen(false);
+      setEditForm(null);
+      alert("Beneficiário atualizado com sucesso!");
+
+      /* === CÓDIGO MOCK COMENTADO PARA REFERÊNCIA ===
       const novos = beneficiarios.map((b) => b.id === editForm.id ? { ...editForm, cpfCrnm: cpfCrnmLimpo, nif: nifLimpo } : b);
       setBeneficiarios(novos);
       localStorage.setItem('mockBeneficiarios', JSON.stringify(novos));
-      setEditModalOpen(false);
-      setEditForm(null);
+      === FIM DO CÓDIGO MOCK === */
     } catch (err) {
-      setEditError("Erro ao salvar edição");
+      console.error("Erro ao atualizar beneficiário:", err);
+
+      let mensagemErro = "Erro ao salvar edição";
+      if (err.response?.data?.message) {
+        mensagemErro = err.response.data.message;
+      } else if (err.response?.status === 400) {
+        mensagemErro = "Dados inválidos. Verifique os campos preenchidos.";
+      } else if (err.response?.status === 404) {
+        mensagemErro = "Beneficiário não encontrado.";
+      } else if (err.response?.status >= 500) {
+        mensagemErro = "Erro interno do servidor. Tente novamente mais tarde.";
+      }
+
+      setEditError(mensagemErro);
     } finally {
       setEditLoading(false);
     }
@@ -111,10 +212,10 @@ export default function ListaBeneficiarios() {
     <div className={styles.containerGeral}>
       <MenuBar />
       <Navigation />
-      <div className={styles.contentWrapper}> {/* Novo wrapper para centralização e largura */}
-        <div className={styles.listContainer}> {/* Usando listContainer para diferenciar do formContainer */}
+      <div className={styles.contentWrapper}>
+        <div className={styles.listContainer}>
           <h1 className={styles.titulo}>Beneficiários Cadastrados</h1>
-          <div className={styles.decoracao}></div> {/* Linha decorativa */}
+          <div className={styles.decoracao}></div>
 
           <div className={styles.actionsHeader}>
             <button
@@ -124,7 +225,7 @@ export default function ListaBeneficiarios() {
               + Adicionar Beneficiário
             </button>
           </div>
-          <div className={styles.tableWrapper}> {/* Para permitir rolagem em telas pequenas */}
+          <div className={styles.tableWrapper}>
             <table className={styles.beneficiariosTable}>
               <thead>
                 <tr>
@@ -138,33 +239,39 @@ export default function ListaBeneficiarios() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={5} className={styles.loadingMessage}>Carregando...</td>
+                    <td colSpan={5} className={styles.loadingMessage}>
+                      Carregando...
+                    </td>
                   </tr>
                 ) : error ? (
                   <tr>
-                    <td colSpan={5} className={styles.errorMessage}>{error}</td>
+                    <td colSpan={5} className={styles.errorMessage}>
+                      {error}
+                    </td>
                   </tr>
                 ) : beneficiarios.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className={styles.noDataMessage}>Nenhum beneficiário cadastrado ainda.</td>
+                    <td colSpan={5} className={styles.noDataMessage}>
+                      Nenhum beneficiário cadastrado ainda.
+                    </td>
                   </tr>
                 ) : (
                   beneficiarios.map((b) => (
                     <tr key={b.id}>
-                      <td>{b.nomeCompleto}</td>
-                      <td>{b.email}</td>
-                      <td>{b.telefoneCelular}</td>
-                      <td>{b.nif || '–'}</td>
+                      <td>{b.person?.name || "–"}</td>
+                      <td>{b.person?.email || "–"}</td>
+                      <td>{b.person?.phone || "–"}</td>
+                      <td>{b.nif || "–"}</td>
                       <td className={styles.actionButtons}>
-                        <button 
-                          className={styles.editButton} 
+                        <button
+                          className={styles.editButton}
                           onClick={() => openEditModal(b)}
                           disabled={loading}
                         >
                           Editar
                         </button>
-                        <button 
-                          className={styles.deleteButton} 
+                        <button
+                          className={styles.deleteButton}
                           onClick={() => handleDelete(b.id)}
                           disabled={loading}
                         >
@@ -179,58 +286,153 @@ export default function ListaBeneficiarios() {
           </div>
         </div>
       </div>
-      {/* Modal de edição */}
+
+      {/* Modal de Edição */}
       {editModalOpen && (
         <div className={modalStyles.modalOverlay}>
           <div className={modalStyles.modalContent}>
-            <h2 className={modalStyles.titulo}>Editar Beneficiário</h2>
-            <form onSubmit={handleEditSubmit} className={modalStyles.formulario}>
+            <h2>Editar Beneficiário</h2>
+            <form onSubmit={handleEditSubmit}>
               <div className={modalStyles.formGroup}>
-                <label htmlFor="edit_nomeCompleto"><b>Nome completo*</b></label>
-                <input id="edit_nomeCompleto" name="nomeCompleto" value={editForm.nomeCompleto} onChange={handleEditChange} required placeholder="Fulano da Silva" />
-              </div>
-              <div className={modalStyles.formGroup}>
-                <label htmlFor="edit_email"><b>E-mail*</b></label>
-                <input id="edit_email" name="email" type="email" value={editForm.email} onChange={handleEditChange} required placeholder="fulano@gmail.com" />
-              </div>
-              <div className={modalStyles.formGroup}>
-                <label htmlFor="edit_telefoneCelular"><b>Telefone*</b></label>
-                <input id="edit_telefoneCelular" name="telefoneCelular" value={editForm.telefoneCelular} onChange={handleEditChange} required placeholder="(45) 9 9988-7766" type="tel" />
-              </div>
-              <div className={modalStyles.formGroup}>
-                <label htmlFor="edit_cpfCrnm"><b>CPF/CRNM (opcional se NIF for preenchido)</b></label>
-                <input id="edit_cpfCrnm" name="cpfCrnm" type="text" pattern="[0-9]*" maxLength={11} value={editForm.cpfCrnm} onChange={e => { const onlyNums = e.target.value.replace(/\D/g, ""); setEditForm({ ...editForm, cpfCrnm: onlyNums }); }} placeholder="11122233355" />
+                <label htmlFor="editNomeCompleto">
+                  <b>Nome completo*</b>
+                </label>
+                <input
+                  id="editNomeCompleto"
+                  name="nomeCompleto"
+                  value={editForm?.nomeCompleto || ""}
+                  onChange={handleEditChange}
+                  required
+                />
               </div>
               <div className={modalStyles.formGroup}>
-                <label htmlFor="edit_nif"><b>NIF (opcional se CPF/CRNM for preenchido)</b></label>
-                <input id="edit_nif" name="nif" type="text" pattern="[0-9]*" value={editForm.nif} onChange={e => { const onlyNums = e.target.value.replace(/\D/g, ""); setEditForm({ ...editForm, nif: onlyNums }); }} placeholder="123456789" />
-              </div>
-              <hr className={modalStyles.separador} />
-              <div className={modalStyles.formGroupFullWidth}>
-                <label htmlFor="edit_endereco"><b>Endereço*</b></label>
-                <input id="edit_endereco" name="endereco" value={editForm.endereco} onChange={handleEditChange} required placeholder="Rua da Água" />
+                <label htmlFor="editEmail">
+                  <b>E-mail*</b>
+                </label>
+                <input
+                  id="editEmail"
+                  name="email"
+                  type="email"
+                  value={editForm?.email || ""}
+                  onChange={handleEditChange}
+                  required
+                />
               </div>
               <div className={modalStyles.formGroup}>
-                <label htmlFor="edit_numero"><b>Número*</b></label>
-                <input id="edit_numero" name="numero" type="number" value={editForm.numero} onChange={handleEditChange} required placeholder="2015" />
+                <label htmlFor="editTelefoneCelular">
+                  <b>Telefone*</b>
+                </label>
+                <input
+                  id="editTelefoneCelular"
+                  name="telefoneCelular"
+                  value={editForm?.telefoneCelular || ""}
+                  onChange={handleEditChange}
+                  required
+                />
               </div>
               <div className={modalStyles.formGroup}>
-                <label htmlFor="edit_complemento"><b>Complemento</b></label>
-                <input id="edit_complemento" name="complemento" value={editForm.complemento} onChange={handleEditChange} placeholder="Ap 307" />
+                <label htmlFor="editCpfCrnm">
+                  <b>CPF/CRNM</b>
+                </label>
+                <input
+                  id="editCpfCrnm"
+                  name="cpfCrnm"
+                  type="text"
+                  pattern="[0-9]*"
+                  maxLength={11}
+                  value={editForm?.cpfCrnm || ""}
+                  onChange={(e) => {
+                    const onlyNums = e.target.value.replace(/\D/g, "");
+                    setEditForm({ ...editForm, cpfCrnm: onlyNums });
+                  }}
+                />
               </div>
-              <div className={modalStyles.formGroupFullWidth}>
-                <label htmlFor="edit_bairro"><b>Bairro*</b></label>
-                <input id="edit_bairro" name="bairro" value={editForm.bairro} onChange={handleEditChange} required placeholder="Centro" />
+              <div className={modalStyles.formGroup}>
+                <label htmlFor="editNif">
+                  <b>NIF</b>
+                </label>
+                <input
+                  id="editNif"
+                  name="nif"
+                  type="text"
+                  pattern="[0-9]*"
+                  value={editForm?.nif || ""}
+                  onChange={(e) => {
+                    const onlyNums = e.target.value.replace(/\D/g, "");
+                    setEditForm({ ...editForm, nif: onlyNums });
+                  }}
+                />
               </div>
-              <div className={modalStyles.formGroupFullWidth}>
-                <label htmlFor="edit_pontoReferencia"><b>Ponto de referência</b></label>
-                <input id="edit_pontoReferencia" name="pontoReferencia" value={editForm.pontoReferencia} onChange={handleEditChange} placeholder="Em frente ao parque" />
+              <div className={modalStyles.formGroup}>
+                <label htmlFor="editEndereco">
+                  <b>Endereço*</b>
+                </label>
+                <input
+                  id="editEndereco"
+                  name="endereco"
+                  value={editForm?.endereco || ""}
+                  onChange={handleEditChange}
+                  required
+                />
               </div>
-              <div style={{ display: 'flex', gap: 16, justifyContent: 'center', width: '100%' }}>
-                <button type="button" onClick={closeEditModal} style={{ background: '#aaa', color: '#fff' }}>Cancelar</button>
-                <button type="submit" disabled={editLoading}>{editLoading ? "Salvando..." : "Salvar Alterações"}</button>
+              <div className={modalStyles.formGroup}>
+                <label htmlFor="editNumero">
+                  <b>Número*</b>
+                </label>
+                <input
+                  id="editNumero"
+                  name="numero"
+                  type="number"
+                  value={editForm?.numero || ""}
+                  onChange={handleEditChange}
+                  required
+                />
               </div>
-              {editError && <div className={modalStyles.errorMessage}>{editError}</div>}
+              <div className={modalStyles.formGroup}>
+                <label htmlFor="editComplemento">
+                  <b>Complemento</b>
+                </label>
+                <input
+                  id="editComplemento"
+                  name="complemento"
+                  value={editForm?.complemento || ""}
+                  onChange={handleEditChange}
+                />
+              </div>
+              <div className={modalStyles.formGroup}>
+                <label htmlFor="editBairro">
+                  <b>Bairro*</b>
+                </label>
+                <input
+                  id="editBairro"
+                  name="bairro"
+                  value={editForm?.bairro || ""}
+                  onChange={handleEditChange}
+                  required
+                />
+              </div>
+              <div className={modalStyles.formGroup}>
+                <label htmlFor="editPontoReferencia">
+                  <b>Ponto de referência</b>
+                </label>
+                <input
+                  id="editPontoReferencia"
+                  name="pontoReferencia"
+                  value={editForm?.pontoReferencia || ""}
+                  onChange={handleEditChange}
+                />
+              </div>
+              <div className={modalStyles.buttonGroup}>
+                <button type="submit" disabled={editLoading}>
+                  {editLoading ? "Salvando..." : "Salvar"}
+                </button>
+                <button type="button" onClick={closeEditModal}>
+                  Cancelar
+                </button>
+              </div>
+              {editError && (
+                <div className={modalStyles.errorMessage}>{editError}</div>
+              )}
             </form>
           </div>
         </div>

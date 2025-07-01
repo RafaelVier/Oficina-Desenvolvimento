@@ -3,12 +3,11 @@ package com.oficina_dev.backend.mappers;
 import com.oficina_dev.backend.dtos.Category.CategoryResponseDto;
 import com.oficina_dev.backend.dtos.Item.ItemRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Item.ItemRequestDto;
-import com.oficina_dev.backend.dtos.Item.ItemRequestPatchDto;
 import com.oficina_dev.backend.dtos.Item.ItemResponseDto;
 import com.oficina_dev.backend.dtos.Size.SizeResponseDto;
-import com.oficina_dev.backend.models.Category.Category;
-import com.oficina_dev.backend.models.Item.Item;
-import com.oficina_dev.backend.models.Size.Size;
+import com.oficina_dev.backend.models.Category;
+import com.oficina_dev.backend.models.Item;
+import com.oficina_dev.backend.models.Size;
 import com.oficina_dev.backend.services.CategoryService;
 import com.oficina_dev.backend.services.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ public class ItemMapper {
         item.setSize(size);
     }
 
-    public void patch(Item item, ItemRequestPatchDto dto) {
+    public void patch(Item item, ItemRequestDto dto) {
         if (dto.getName() != null) {
             item.setName(dto.getName());
         }
@@ -76,12 +75,12 @@ public class ItemMapper {
             item.setQuantity(dto.getQuantity());
         }
 
-        if (dto.getCategoryId() != null) {
+        if(dto.getCategoryId() != null) {
             Category category = categoryService.findById(dto.getCategoryId());
             item.setCategory(category);
         }
 
-        if (dto.getSizeId() != null) {
+        if(dto.getSizeId() != null) {
             Size size = sizeService.findById(dto.getSizeId());
             item.setSize(size);
         }

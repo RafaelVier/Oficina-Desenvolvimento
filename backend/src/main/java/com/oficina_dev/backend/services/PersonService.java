@@ -2,11 +2,10 @@ package com.oficina_dev.backend.services;
 
 import com.oficina_dev.backend.dtos.Person.PersonRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Person.PersonRequestDto;
-import com.oficina_dev.backend.dtos.Person.PersonRequestPatchDto;
 import com.oficina_dev.backend.dtos.Person.PersonResponseDto;
-import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.PersonMapper;
-import com.oficina_dev.backend.models.Person.Person;
+import com.oficina_dev.backend.models.Cpf;
+import com.oficina_dev.backend.models.Person;
 import com.oficina_dev.backend.repositories.PersonRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -38,9 +37,18 @@ public class PersonService {
                 });
     }
 
+    public Person findByCpf(Cpf cpf) {
+        logger.debug("Finding person by cpf in database: {}", cpf);
+        return personRepository.findByCpf(cpf)
+                .orElseThrow(() -> {
+                    logger.error("Person with cpf {} not found", cpf);
+                    return new EntityNotFoundException(personNotFoundMessage);
+                });
+    }
+
     public PersonResponseDto getById(UUID id) {
         logger.debug("Service: Fetching person by ID: {}", id);
-        Person person = findById(id);
+        Person person = this.findById(id);
         logger.debug("Person found: {} (ID: {})", person.getName(), person.getId());
         return this.personMapper.toResponse(person);
     }
@@ -82,7 +90,7 @@ public class PersonService {
         }
     }
 
-    public PersonResponseDto patch(UUID id, PersonRequestPatchDto personRequestDto) {
+    public PersonResponseDto patch(UUID id, PersonRequestDto personRequestDto) {
         logger.debug("Service: Partially updating person with ID: {}", id);
         Person person = this.findById(id);
         this.personMapper.patch(person, personRequestDto);
@@ -91,8 +99,8 @@ public class PersonService {
             logger.info("Person partially updated successfully: {} (ID: {})", savedPerson.getName(), savedPerson.getId());
             return this.personMapper.toResponse(savedPerson);
         } catch (Exception e) {
-            logger.error("Error partially updating person with ID {}: {}", id, e.getMessage(), e);
-            throw e;
+            logger.error("Error updating person with ID: {}", id, e);
+            throw new RuntimeException("Failed to update person", e);
         }
     }
 

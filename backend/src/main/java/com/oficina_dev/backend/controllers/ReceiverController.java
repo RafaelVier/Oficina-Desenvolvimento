@@ -59,10 +59,10 @@ public class ReceiverController {
     @PatchMapping("/{id}")
     public ResponseEntity<ReceiverResponseDto> partialUpdate(
             @PathVariable UUID id,
-            @RequestBody @Valid ReceiverRequestPatchDto receiverRequestPatchDto
+            @RequestBody ReceiverRequestDto receiverRequestDto
     ) {
         logger.info("Partially updating receiver with ID: {}", id);
-        ReceiverResponseDto receiverResponseDto = this.receiverService.patch(id, receiverRequestPatchDto);
+        ReceiverResponseDto receiverResponseDto = this.receiverService.patch(id, receiverRequestDto);
         logger.info("Receiver partially updated successfully");
         return ResponseEntity.ok(receiverResponseDto);
     }

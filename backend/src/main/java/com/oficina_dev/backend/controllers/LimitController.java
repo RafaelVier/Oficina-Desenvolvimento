@@ -1,9 +1,8 @@
 package com.oficina_dev.backend.controllers;
 
-import com.oficina_dev.backend.dtos.Limit.LimitRequestPatchDto;
+import com.oficina_dev.backend.dtos.Limit.LimitRequestDto;
 import com.oficina_dev.backend.dtos.Limit.LimitResponseDto;
 import com.oficina_dev.backend.services.LimitService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +52,10 @@ public class LimitController {
     @PatchMapping("/{id}")
     public ResponseEntity<LimitResponseDto> patch(
             @PathVariable UUID id,
-            @RequestBody @Valid LimitRequestPatchDto limitRequestPatchDto
+            @RequestBody LimitRequestDto limitRequestDto
     ) {
         logger.info("Partially updating limit with ID: {}", id);
-        LimitResponseDto limitResponseDto = this.limitService.patch(id, limitRequestPatchDto);
+        LimitResponseDto limitResponseDto = this.limitService.patch(id, limitRequestDto);
         logger.info("Limit partially updated successfully");
         return ResponseEntity.ok(limitResponseDto);
     }

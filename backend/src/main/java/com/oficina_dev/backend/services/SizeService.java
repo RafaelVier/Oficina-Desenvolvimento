@@ -2,11 +2,10 @@ package com.oficina_dev.backend.services;
 
 import com.oficina_dev.backend.dtos.Size.SizeRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Size.SizeRequestDto;
-import com.oficina_dev.backend.dtos.Size.SizeRequestPatchDto;
 import com.oficina_dev.backend.dtos.Size.SizeResponseDto;
 import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.SizeMapper;
-import com.oficina_dev.backend.models.Size.Size;
+import com.oficina_dev.backend.models.Size;
 import com.oficina_dev.backend.repositories.SizeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +61,7 @@ public class SizeService {
         return this.sizeMapper.toResponse(savedSize);
     }
 
-    public SizeResponseDto patch(UUID id, SizeRequestPatchDto sizeRequestDto) {
+    public SizeResponseDto patch(UUID id, SizeRequestDto sizeRequestDto) {
         Size size = this.findById(id);
         this.sizeMapper.patch(size, sizeRequestDto);
         Size savedSize = this.sizeRepository.saveAndFlush(size);

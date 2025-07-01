@@ -3,9 +3,7 @@ package com.oficina_dev.backend.controllers;
 
 import com.oficina_dev.backend.dtos.Size.SizeRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Size.SizeRequestDto;
-import com.oficina_dev.backend.dtos.Size.SizeRequestPatchDto;
 import com.oficina_dev.backend.dtos.Size.SizeResponseDto;
-import com.oficina_dev.backend.models.Size.Size;
 import com.oficina_dev.backend.services.SizeService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +45,7 @@ public class SizeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<SizeResponseDto> patch(@PathVariable UUID id, @RequestBody @Valid SizeRequestPatchDto sizeRequestDto) {
+    public ResponseEntity<SizeResponseDto> patch(@PathVariable UUID id, @RequestBody SizeRequestDto sizeRequestDto) {
         SizeResponseDto sizeResponseDto = this.sizeService.patch(id, sizeRequestDto);
         return ResponseEntity.ok(sizeResponseDto);
 

@@ -2,10 +2,7 @@ package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Transfer.TransferRequestDto;
 import com.oficina_dev.backend.dtos.Transfer.TransferResponseDto;
-import com.oficina_dev.backend.models.Receiver.Receiver;
-import com.oficina_dev.backend.models.Transfer.Transfer;
-import com.oficina_dev.backend.models.Voluntary.Voluntary;
-import com.oficina_dev.backend.services.GiverService;
+import com.oficina_dev.backend.models.Transfer;
 import com.oficina_dev.backend.services.ReceiverService;
 import com.oficina_dev.backend.services.VoluntaryService;
 import org.springframework.beans.factory.annotation.Autowired;

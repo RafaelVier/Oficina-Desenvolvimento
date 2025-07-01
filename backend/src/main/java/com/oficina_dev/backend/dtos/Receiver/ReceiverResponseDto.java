@@ -10,6 +10,5 @@ public record ReceiverResponseDto(
         UUID id,
         PersonResponseDto person,
         String nif,
-        Boolean isFit,
-        ReceiverLimitResponseDto receiverLimit
+        Boolean isFit
 ) { }

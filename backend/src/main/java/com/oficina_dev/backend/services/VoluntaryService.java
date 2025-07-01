@@ -1,11 +1,14 @@
 package com.oficina_dev.backend.services;
 
+import com.oficina_dev.backend.dtos.Auth.AuthRequestDto;
+import com.oficina_dev.backend.dtos.Auth.AuthResponseDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryRequestDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryResponseDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryRemovedResponseDto;
-import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.VoluntaryMapper;
-import com.oficina_dev.backend.models.Voluntary.Voluntary;
+import com.oficina_dev.backend.models.Cpf;
+import com.oficina_dev.backend.models.Person;
+import com.oficina_dev.backend.models.Voluntary;
 import com.oficina_dev.backend.repositories.VoluntaryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -27,6 +30,9 @@ public class VoluntaryService {
 
     @Autowired
     private VoluntaryMapper voluntaryMapper;
+
+    @Autowired
+    private PersonService personService;
 
     public Voluntary findById(UUID id) {
         logger.info("Searching for voluntary with ID: {}", id);
@@ -107,5 +113,15 @@ public class VoluntaryService {
         logger.info("Voluntary removed successfully with ID: {}", voluntary.getId());
         return this.voluntaryMapper.toRemovedResponse(voluntary);
 
+    }
+
+    public AuthResponseDto auth(AuthRequestDto authRequest) {
+        Person person = this.personService.findByCpf(new Cpf(authRequest.getCpf()));
+        Voluntary voluntary = this.voluntaryRepository.findByPersonIdAndPassword(person.getId(),authRequest.getPassword())
+                .orElseThrow(() -> {
+                    logger.error("Voluntary with CPF {} not found", authRequest.getCpf());
+                    return new EntityNotFoundException(voluntaryNotFoundMessage);
+                });
+        return this.voluntaryMapper.toAuthResponse(voluntary);
     }
 }

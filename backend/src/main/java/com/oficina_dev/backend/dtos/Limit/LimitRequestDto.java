@@ -11,12 +11,12 @@ import lombok.Setter;
 public class LimitRequestDto {
 
     @NotBlank
-    private int month;
+    private Integer month;
 
     @NotBlank
-    private int year;
+    private Integer year;
 
     @NotBlank
-    private int limitQuantity;
+    private Integer limitQuantity;
 
 }

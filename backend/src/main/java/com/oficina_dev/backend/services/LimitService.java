@@ -1,11 +1,10 @@
 package com.oficina_dev.backend.services;
 
 import com.oficina_dev.backend.dtos.Limit.LimitRequestDto;
-import com.oficina_dev.backend.dtos.Limit.LimitRequestPatchDto;
 import com.oficina_dev.backend.dtos.Limit.LimitResponseDto;
 import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.LimitMapper;
-import com.oficina_dev.backend.models.Limit.Limit;
+import com.oficina_dev.backend.models.Limit;
 import com.oficina_dev.backend.repositories.LimitRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,18 +90,31 @@ public class LimitService {
         return this.limitMapper.toResponse(savedLimit);
     }
 
-    public LimitResponseDto patch(UUID id, LimitRequestPatchDto limitRequestPatchDto) {
-        logger.debug("Service: Partially updating limit with ID: {}", id);
-        Limit limit = findById(id);
+    public LimitResponseDto patch(UUID id, LimitRequestDto limitRequestDto) {
+        logger.debug("Patching limit with ID: {}", id);
+        Limit limit = this.findById(id);
 
-        if (limitRequestPatchDto.getLimitQuantity() != null) {
-            logger.debug("Updating limit quantity from {} to {}", limit.getLimitQuantity(), limitRequestPatchDto.getLimitQuantity());
-            limit.setLimitQuantity(limitRequestPatchDto.getLimitQuantity());
+        if (limitRequestDto.getLimitQuantity() != null) {
+            logger.debug("Updating limit quantity from {} to {}", limit.getLimitQuantity(), limitRequestDto.getLimitQuantity());
+            limit.setLimitQuantity(limitRequestDto.getLimitQuantity());
         }
 
-        Limit updatedLimit = this.limitRepository.saveAndFlush(limit);
-        logger.debug("Limit partially updated successfully");
-        return this.limitMapper.toResponse(updatedLimit);
+        if (limitRequestDto.getMonth() != null) {
+            logger.debug("Updating month from {} to {}", limit.getMonth(), limitRequestDto.getMonth());
+            limit.setMonth(limitRequestDto.getMonth());
+        }
+
+        if (limitRequestDto.getYear() != null) {
+            logger.debug("Updating year from {} to {}", limit.getYear(), limitRequestDto.getYear());
+            limit.setYear(limitRequestDto.getYear());
+        }
+
+        Limit savedLimit = this.limitRepository.saveAndFlush(limit);
+        logger.debug("Limit patched successfully with ID: {}", savedLimit.getId());
+        return this.limitMapper.toResponse(savedLimit);
     }
 
+    public Limit getCurrentLimit() {
+        return this.findByYearAndMonth(ZonedDateTime.now().getYear(), ZonedDateTime.now().getMonthValue());
+    }
 }

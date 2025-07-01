@@ -1,19 +1,18 @@
 package com.oficina_dev.backend.configs;
 
-import com.oficina_dev.backend.models.Address.Address;
-import com.oficina_dev.backend.models.Category.Category;
-import com.oficina_dev.backend.models.Giver.Giver;
-import com.oficina_dev.backend.models.Item.Item;
-import com.oficina_dev.backend.models.Person.Person;
-import com.oficina_dev.backend.models.Size.Size;
-import com.oficina_dev.backend.models.Voluntary.Voluntary;
+import com.oficina_dev.backend.models.Address;
+import com.oficina_dev.backend.models.Category;
+import com.oficina_dev.backend.models.Giver;
+import com.oficina_dev.backend.models.Item;
+import com.oficina_dev.backend.models.Person;
+import com.oficina_dev.backend.models.Size;
+import com.oficina_dev.backend.models.Voluntary;
 import com.oficina_dev.backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +39,9 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private GiverRepository giverRepository;
+
+    @Autowired
+    private LimitRepository limitRepository;
 
     // UUIDs fixos para Address
     private final UUID ADDRESS_1_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
@@ -127,5 +129,7 @@ public class TestConfig implements CommandLineRunner {
         Giver giver3 = new Giver(people.get(2));
 
         List<Giver> givers = giverRepository.saveAllAndFlush(List.of(giver1, giver2, giver3));
+
+//        limitRepository.save(new Limit(7, 2025, 10));
     }
 }

@@ -3,7 +3,6 @@ package com.oficina_dev.backend.controllers;
 
 import com.oficina_dev.backend.dtos.Category.CategoryRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Category.CategoryRequestDto;
-import com.oficina_dev.backend.dtos.Category.CategoryRequestPatchDto;
 import com.oficina_dev.backend.dtos.Category.CategoryResponseDto;
 import com.oficina_dev.backend.services.CategoryService;
 import jakarta.validation.Valid;
@@ -46,7 +45,7 @@ public class CategoryController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CategoryResponseDto> patch(@PathVariable UUID id, @RequestBody @Valid CategoryRequestPatchDto categoryRequestDto) {
+    public ResponseEntity<CategoryResponseDto> patch(@PathVariable UUID id, @RequestBody CategoryRequestDto categoryRequestDto) {
         CategoryResponseDto categoryResponseDto = this.categoryService.patch(id, categoryRequestDto);
         return ResponseEntity.ok(categoryResponseDto);
 

@@ -1,6 +1,6 @@
 package com.oficina_dev.backend.repositories;
 
-import com.oficina_dev.backend.models.Category.Category;
+import com.oficina_dev.backend.models.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

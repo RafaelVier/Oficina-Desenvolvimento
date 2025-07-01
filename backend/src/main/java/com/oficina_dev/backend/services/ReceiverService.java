@@ -1,11 +1,10 @@
 package com.oficina_dev.backend.services;
 
 import com.oficina_dev.backend.dtos.Receiver.ReceiverRequestDto;
-import com.oficina_dev.backend.dtos.Receiver.ReceiverRequestPatchDto;
 import com.oficina_dev.backend.dtos.Receiver.ReceiverResponseDto;
 import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.ReceiverMapper;
-import com.oficina_dev.backend.models.Receiver.Receiver;
+import com.oficina_dev.backend.models.Receiver;
 import com.oficina_dev.backend.repositories.ReceiverRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -31,6 +30,8 @@ public class ReceiverService {
     @Autowired
     private PersonService personService;
 
+    @Autowired
+    private LimitService limitService;
 
     public Receiver findById(UUID id) {
         logger.debug("Finding receiver by ID in database: {}", id);
@@ -76,6 +77,7 @@ public class ReceiverService {
         Receiver receiver = this.receiverMapper.toEntity(
                 receiverRequestDto, this.personService.findById(receiverRequestDto.getPersonId())
         );
+
         Receiver savedReceiver = this.receiverRepository.saveAndFlush(receiver);
         logger.debug("Receiver created with ID: {}", savedReceiver.getId());
         return this.receiverMapper.toResponse(savedReceiver);
@@ -96,16 +98,16 @@ public class ReceiverService {
         return this.receiverMapper.toResponse(updatedReceiver);
     }
 
-    public ReceiverResponseDto patch(UUID id, ReceiverRequestPatchDto receiverRequestPatchDto) {
+    public ReceiverResponseDto patch(UUID id, ReceiverRequestDto receiverRequestDto) {
         logger.debug("Service: Partially updating receiver with ID: {}", id);
         Receiver receiver = findById(id);
 
-        if (receiverRequestPatchDto.getNif() != null && this.existsByNifAndIdNot(receiverRequestPatchDto.getNif(),id))  {
+        if (receiverRequestDto.getNif() != null && this.existsByNifAndIdNot(receiverRequestDto.getNif(),id))  {
                 throw new EntityAlreadyExists("Another receiver with this NIF already exists");
         }
 
-        this.receiverMapper.patch(receiver, receiverRequestPatchDto,
-                this.personService.findById(receiverRequestPatchDto.getPersonId())
+        this.receiverMapper.patch(receiver, receiverRequestDto,
+                this.personService.findById(receiverRequestDto.getPersonId())
         );
         logger.debug("Receiver with ID {} found and will be partially updated", id);
         Receiver updatedReceiver = this.receiverRepository.saveAndFlush(receiver);

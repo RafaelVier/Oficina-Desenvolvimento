@@ -1,10 +1,9 @@
 package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Receiver.ReceiverRequestDto;
-import com.oficina_dev.backend.dtos.Receiver.ReceiverRequestPatchDto;
 import com.oficina_dev.backend.dtos.Receiver.ReceiverResponseDto;
-import com.oficina_dev.backend.models.Person.Person;
-import com.oficina_dev.backend.models.Receiver.Receiver;
+import com.oficina_dev.backend.models.Person;
+import com.oficina_dev.backend.models.Receiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,8 +28,7 @@ public class ReceiverMapper {
                 receiver.getId(),
                 this.personMapper.toResponse(receiver.getPerson()),
                 receiver.getNif(),
-                receiver.getIsFit(),
-                this.receiverLimitMapper.toResponse(receiver.getAtualReceiverLimit())
+                receiver.getIsFit()
         );
     }
 
@@ -42,16 +40,16 @@ public class ReceiverMapper {
 
     }
 
-    public void patch(Receiver receiver, ReceiverRequestPatchDto receiverRequestPatchDto, Person person) {
-        if (receiverRequestPatchDto.getIsFit() != null) {
-            receiver.setFit(receiverRequestPatchDto.getIsFit());
+    public void patch(Receiver receiver, ReceiverRequestDto receiverRequestDto, Person person) {
+        if (receiverRequestDto.getIsFit() != null) {
+            receiver.setFit(receiverRequestDto.getIsFit());
         }
 
-        if (receiverRequestPatchDto.getNif() != null) {
-            receiver.setNif(receiverRequestPatchDto.getNif());
+        if (receiverRequestDto.getNif() != null) {
+            receiver.setNif(receiverRequestDto.getNif());
         }
 
-        if (receiverRequestPatchDto.getPersonId() != null) {
+        if (receiverRequestDto.getPersonId() != null) {
             receiver.setPerson(person);
         }
 

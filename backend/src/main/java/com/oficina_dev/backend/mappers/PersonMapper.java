@@ -2,10 +2,9 @@ package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Person.PersonRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Person.PersonRequestDto;
-import com.oficina_dev.backend.dtos.Person.PersonRequestPatchDto;
 import com.oficina_dev.backend.dtos.Person.PersonResponseDto;
-import com.oficina_dev.backend.models.Person.Person;
-import com.oficina_dev.backend.models.Address.Address;
+import com.oficina_dev.backend.models.Person;
+import com.oficina_dev.backend.models.Address;
 import com.oficina_dev.backend.dtos.Address.AddressResponseDto;
 import com.oficina_dev.backend.services.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,7 @@ public class PersonMapper {
         person.setAddress(address);
     }
 
-    public void patch(Person person, PersonRequestPatchDto dto) {
+    public void patch(Person person, PersonRequestDto dto) {
         if (dto.getName() != null) {
             person.setName(dto.getName());
         }

@@ -2,7 +2,6 @@ package com.oficina_dev.backend.controllers;
 
 import com.oficina_dev.backend.dtos.Person.PersonRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Person.PersonRequestDto;
-import com.oficina_dev.backend.dtos.Person.PersonRequestPatchDto;
 import com.oficina_dev.backend.dtos.Person.PersonResponseDto;
 import com.oficina_dev.backend.services.PersonService;
 import jakarta.validation.Valid;
@@ -57,7 +56,7 @@ public class PersonController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<PersonResponseDto> patch(@PathVariable UUID id, @RequestBody @Valid PersonRequestPatchDto personRequestDto) {
+    public ResponseEntity<PersonResponseDto> patch(@PathVariable UUID id, @RequestBody PersonRequestDto personRequestDto) {
         logger.info("Partially updating person with ID: {}", id);
         PersonResponseDto personResponseDto = this.personService.patch(id, personRequestDto);
         logger.info("Person partially updated successfully: {}", personResponseDto.name());

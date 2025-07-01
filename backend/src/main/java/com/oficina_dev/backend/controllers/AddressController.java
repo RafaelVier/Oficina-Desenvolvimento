@@ -2,7 +2,6 @@ package com.oficina_dev.backend.controllers;
 
 import com.oficina_dev.backend.dtos.Address.AddressRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Address.AddressRequestDto;
-import com.oficina_dev.backend.dtos.Address.AddressRequestPatchDto;
 import com.oficina_dev.backend.dtos.Address.AddressResponseDto;
 import com.oficina_dev.backend.services.AddressService;
 import jakarta.validation.Valid;
@@ -45,7 +44,7 @@ public class AddressController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AddressResponseDto> patch(@PathVariable UUID id, @RequestBody @Valid AddressRequestPatchDto addressRequestDto) {
+    public ResponseEntity<AddressResponseDto> patch(@PathVariable UUID id, @RequestBody AddressRequestDto addressRequestDto) {
         AddressResponseDto addressResponseDto = this.addressService.patch(id, addressRequestDto);
         return ResponseEntity.ok(addressResponseDto);
 

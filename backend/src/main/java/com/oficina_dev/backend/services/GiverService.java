@@ -4,7 +4,7 @@ import com.oficina_dev.backend.dtos.Giver.GiverRequestDto;
 import com.oficina_dev.backend.dtos.Giver.GiverResponseDto;
 import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.GiverMapper;
-import com.oficina_dev.backend.models.Giver.Giver;
+import com.oficina_dev.backend.models.Giver;
 import com.oficina_dev.backend.repositories.GiverRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;

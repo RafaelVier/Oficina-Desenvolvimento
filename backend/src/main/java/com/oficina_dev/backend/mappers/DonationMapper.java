@@ -2,12 +2,9 @@ package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Donation.DonationRequestDto;
 import com.oficina_dev.backend.dtos.Donation.DonationResponseDto;
-import com.oficina_dev.backend.models.Donation.Donation;
-import com.oficina_dev.backend.repositories.DonationItemRepository;
+import com.oficina_dev.backend.models.Donation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.time.ZonedDateTime;
 
 @Component
 public class DonationMapper {

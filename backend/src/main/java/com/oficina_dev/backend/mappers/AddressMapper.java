@@ -2,9 +2,8 @@ package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Address.AddressRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Address.AddressRequestDto;
-import com.oficina_dev.backend.dtos.Address.AddressRequestPatchDto;
 import com.oficina_dev.backend.dtos.Address.AddressResponseDto;
-import com.oficina_dev.backend.models.Address.Address;
+import com.oficina_dev.backend.models.Address;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -54,7 +53,7 @@ public class AddressMapper {
         address.setReferencePoint(addressRequestDto.getReferencePoint());
     }
 
-    public void patch(Address address, AddressRequestPatchDto addressRequestDto) {
+    public void patch(Address address, AddressRequestDto addressRequestDto) {
         if (addressRequestDto.getNumber() != null) {
             address.setNumber(addressRequestDto.getNumber());
         }

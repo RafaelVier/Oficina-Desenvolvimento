@@ -2,9 +2,8 @@ package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Size.SizeRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Size.SizeRequestDto;
-import com.oficina_dev.backend.dtos.Size.SizeRequestPatchDto;
 import com.oficina_dev.backend.dtos.Size.SizeResponseDto;
-import com.oficina_dev.backend.models.Size.Size;
+import com.oficina_dev.backend.models.Size;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -42,7 +41,7 @@ public class SizeMapper {
         size.setName(sizeRequestDto.getName());
     }
 
-    public void patch(Size size, SizeRequestPatchDto sizeRequestDto) {
+    public void patch(Size size, SizeRequestDto sizeRequestDto) {
         if (sizeRequestDto.getName() != null) {
             size.setName(sizeRequestDto.getName());
         }

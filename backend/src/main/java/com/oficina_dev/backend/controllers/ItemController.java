@@ -3,7 +3,6 @@ package com.oficina_dev.backend.controllers;
 
 import com.oficina_dev.backend.dtos.Item.ItemRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Item.ItemRequestDto;
-import com.oficina_dev.backend.dtos.Item.ItemRequestPatchDto;
 import com.oficina_dev.backend.dtos.Item.ItemResponseDto;
 import com.oficina_dev.backend.services.ItemService;
 import org.slf4j.Logger;
@@ -47,7 +46,7 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ItemResponseDto> patch(@PathVariable UUID id,
-                                                 @RequestBody ItemRequestPatchDto itemRequestDto) {
+                                                 @RequestBody ItemRequestDto itemRequestDto) {
         ItemResponseDto item = itemService.patch(id, itemRequestDto);
         return ResponseEntity.ok(item);
     }

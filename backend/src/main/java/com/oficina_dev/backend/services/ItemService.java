@@ -2,10 +2,9 @@ package com.oficina_dev.backend.services;
 
 import com.oficina_dev.backend.dtos.Item.ItemRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Item.ItemRequestDto;
-import com.oficina_dev.backend.dtos.Item.ItemRequestPatchDto;
 import com.oficina_dev.backend.dtos.Item.ItemResponseDto;
 import com.oficina_dev.backend.mappers.ItemMapper;
-import com.oficina_dev.backend.models.Item.Item;
+import com.oficina_dev.backend.models.Item;
 import com.oficina_dev.backend.repositories.ItemRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -61,7 +60,7 @@ public class ItemService {
         return itemMapper.toResponse(savedItem);
     }
 
-    public ItemResponseDto patch(UUID id, ItemRequestPatchDto itemRequestDto) {
+    public ItemResponseDto patch(UUID id, ItemRequestDto itemRequestDto) {
         logger.debug("Service: patching item with ID: {}", id);
         Item item = findById(id);
         itemMapper.patch(item, itemRequestDto);

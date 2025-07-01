@@ -2,11 +2,10 @@ package com.oficina_dev.backend.services;
 
 import com.oficina_dev.backend.dtos.Address.AddressRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Address.AddressRequestDto;
-import com.oficina_dev.backend.dtos.Address.AddressRequestPatchDto;
 import com.oficina_dev.backend.dtos.Address.AddressResponseDto;
 import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.AddressMapper;
-import com.oficina_dev.backend.models.Address.Address;
+import com.oficina_dev.backend.models.Address;
 import com.oficina_dev.backend.repositories.AddressRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +44,14 @@ public class AddressService {
 
     public AddressResponseDto create(AddressRequestDto addressRequestDto) {
         Address address = this.addressMapper.toEntity(addressRequestDto);
-        if(this.addressRepository.existsByStreetAndNumberAndNeighborhood(
-                address.getStreet(),
-                address.getNumber(),
-                address.getNeighborhood()
-        )) {
-            String addressAlreadyExistsMessage = "Address already exists";
-            throw new EntityAlreadyExists(addressAlreadyExistsMessage);
-        }
+//        if(this.addressRepository.existsByStreetAndNumberAndNeighborhood(
+//                address.getStreet(),
+//                address.getNumber(),
+//                address.getNeighborhood()
+//        )) {
+//            String addressAlreadyExistsMessage = "Address already exists";
+//            throw new EntityAlreadyExists(addressAlreadyExistsMessage);
+//        }
         Address savedAddress = this.addressRepository.saveAndFlush(address);
         return this.addressMapper.toResponse(savedAddress);
     }
@@ -64,7 +63,7 @@ public class AddressService {
         return this.addressMapper.toResponse(savedAddress);
     }
 
-    public AddressResponseDto patch(UUID id, AddressRequestPatchDto addressRequestDto) {
+    public AddressResponseDto patch(UUID id, AddressRequestDto addressRequestDto) {
         Address address = this.findById(id);
         this.addressMapper.patch(address, addressRequestDto);
         Address savedAddress = this.addressRepository.saveAndFlush(address);

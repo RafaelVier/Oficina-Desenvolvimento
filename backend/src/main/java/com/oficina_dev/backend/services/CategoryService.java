@@ -2,11 +2,10 @@ package com.oficina_dev.backend.services;
 
 import com.oficina_dev.backend.dtos.Category.CategoryRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Category.CategoryRequestDto;
-import com.oficina_dev.backend.dtos.Category.CategoryRequestPatchDto;
 import com.oficina_dev.backend.dtos.Category.CategoryResponseDto;
 import com.oficina_dev.backend.exceptions.EntityAlreadyExists;
 import com.oficina_dev.backend.mappers.CategoryMapper;
-import com.oficina_dev.backend.models.Category.Category;
+import com.oficina_dev.backend.models.Category;
 import com.oficina_dev.backend.repositories.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,7 @@ public class CategoryService {
         return this.categoryMapper.toResponse(savedCategory);
     }
 
-    public CategoryResponseDto patch(UUID id, CategoryRequestPatchDto categoryRequestDto){
+    public CategoryResponseDto patch(UUID id, CategoryRequestDto categoryRequestDto){
         Category category = this.findById(id);
         this.categoryMapper.patch(category, categoryRequestDto);
         Category savedCategory = this.categoryRepository.saveAndFlush(category);

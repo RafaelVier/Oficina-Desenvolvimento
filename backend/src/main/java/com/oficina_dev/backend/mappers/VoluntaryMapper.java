@@ -1,9 +1,10 @@
 package com.oficina_dev.backend.mappers;
 
+import com.oficina_dev.backend.dtos.Auth.AuthResponseDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryRequestDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryResponseDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryRemovedResponseDto;
-import com.oficina_dev.backend.models.Voluntary.Voluntary;
+import com.oficina_dev.backend.models.Voluntary;
 import com.oficina_dev.backend.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -74,4 +75,11 @@ public class VoluntaryMapper{
         }
 
     }
+
+    public AuthResponseDto toAuthResponse(Voluntary voluntary) {
+        return new AuthResponseDto(
+                this.toResponse(voluntary)
+        );
+    }
+
 }

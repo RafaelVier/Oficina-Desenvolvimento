@@ -2,9 +2,8 @@ package com.oficina_dev.backend.mappers;
 
 import com.oficina_dev.backend.dtos.Category.CategoryRemovedResponseDto;
 import com.oficina_dev.backend.dtos.Category.CategoryRequestDto;
-import com.oficina_dev.backend.dtos.Category.CategoryRequestPatchDto;
 import com.oficina_dev.backend.dtos.Category.CategoryResponseDto;
-import com.oficina_dev.backend.models.Category.Category;
+import com.oficina_dev.backend.models.Category;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -41,7 +40,7 @@ public class CategoryMapper {
         category.setName(categoryRequestDto.getName());
     }
 
-    public void patch(Category category, CategoryRequestPatchDto categoryRequestDto) {
+    public void patch(Category category, CategoryRequestDto categoryRequestDto) {
         if (categoryRequestDto.getName() != null) {
             category.setName(categoryRequestDto.getName());
         }

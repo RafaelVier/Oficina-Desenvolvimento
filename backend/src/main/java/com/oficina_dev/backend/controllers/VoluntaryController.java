@@ -1,5 +1,7 @@
 package com.oficina_dev.backend.controllers;
 
+import com.oficina_dev.backend.dtos.Auth.AuthRequestDto;
+import com.oficina_dev.backend.dtos.Auth.AuthResponseDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryRequestDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryResponseDto;
 import com.oficina_dev.backend.dtos.Voluntary.VoluntaryRemovedResponseDto;
@@ -61,4 +63,12 @@ public class VoluntaryController {
         logger.info("Voluntary removed successfully with ID: {}", voluntaryRemovedResponseDto.id());
         return ResponseEntity.ok(voluntaryRemovedResponseDto);
     }
+    @PostMapping("/auth")
+    public ResponseEntity<AuthResponseDto> auth(@RequestBody @Valid AuthRequestDto authRequest){
+        logger.info("Authenticating voluntary with cpf: {}", authRequest.getCpf());
+        AuthResponseDto authResponse = this.voluntaryService.auth(authRequest);
+        logger.info("Authentication successful for cpf: {}", authRequest.getCpf());
+        return ResponseEntity.ok(authResponse);
+    }
+
 }
