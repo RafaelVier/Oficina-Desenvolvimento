@@ -12,13 +12,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AddressRequestPatchDto {
 
-    private int number;
+    @Size(min = 1, max = 100)
+    private String neighborhood;
 
     @Size(min = 1, max = 100)
     private String street;
 
-    @Size(min = 1, max = 100)
-    private String neighborhood;
+    private Integer number;
 
     @Size(min = 1, max = 100)
     private String complement;
@@ -26,5 +26,4 @@ public class AddressRequestPatchDto {
     @Size(min = 1, max = 100)
     private String referencePoint;
 
-    private UUID idCity;
 }

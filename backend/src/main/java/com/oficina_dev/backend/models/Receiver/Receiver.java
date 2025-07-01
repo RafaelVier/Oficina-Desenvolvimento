@@ -2,8 +2,11 @@ package com.oficina_dev.backend.models.Receiver;
 
 import com.oficina_dev.backend.models.Person.Person;
 import com.oficina_dev.backend.models.ReceiverLimit.ReceiverLimit;
-import com.oficina_dev.backend.models.TransferDonation.TransferDonation;
+import com.oficina_dev.backend.models.Transfer.Transfer;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +14,9 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "tb_receivers", schema = "public")
 public class Receiver {
 
@@ -33,6 +38,7 @@ public class Receiver {
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "id_person", referencedColumnName = "id")
     private Person person;
@@ -41,5 +47,32 @@ public class Receiver {
     private List<ReceiverLimit> receiverLimits;
 
     @OneToMany(mappedBy = "receiver")
-    private List<TransferDonation> transferDonations;
+    private List<Transfer> transfers;
+
+    public Receiver(String nif, Boolean isFit, Person person) {
+        setNif(nif);
+        this.isFit = isFit;
+        this.person = person;
+    }
+
+
+    public ReceiverLimit getAtualReceiverLimit() {
+        if (this.receiverLimits == null || this.receiverLimits.isEmpty()) {
+            return null;
+        }
+        return this.receiverLimits.getLast();
+    }
+
+    public void setNif(String nif) {
+        //TODO: IMPLEMENT NIF VALIDATION HERE
+        if (nif == null || nif.isEmpty()) {
+            throw new IllegalArgumentException("NIF cannot be null or empty");
+        }
+        this.nif = nif;
+    }
+
+    public void setFit(Boolean fit) {
+        this.isFit = fit;
+    }
+
 }

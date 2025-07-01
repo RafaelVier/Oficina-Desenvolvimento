@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ReceiverRequestPatchDto {
     UUID personId;
-    String password;
     Boolean isFit;
     String nif;
 }
