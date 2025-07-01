@@ -1,4 +1,4 @@
-package com.oficina_dev.backend.dtos.TransferDonationItem;
+package com.oficina_dev.backend.dtos.TransferItem;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-public class TransferDonationItemRequestPatchDto {
+public class TransferItemRequestPatchDto {
     private UUID itemId;
     int quantity;
 }

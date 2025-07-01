@@ -21,6 +21,7 @@ import java.util.UUID;
 public class Person {
 
     @Id
+    @Setter
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

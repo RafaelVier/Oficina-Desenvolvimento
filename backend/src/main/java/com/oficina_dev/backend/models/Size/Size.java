@@ -5,6 +5,7 @@ import com.oficina_dev.backend.models.Item.Item;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.ZonedDateTime;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class Size {
 
     @Id
+    @Setter
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 

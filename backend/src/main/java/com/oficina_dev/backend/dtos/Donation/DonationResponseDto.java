@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public record DonationResponseDto(
+        UUID id,
         UUID giverId,
         UUID voluntaryId,
         ZonedDateTime date,

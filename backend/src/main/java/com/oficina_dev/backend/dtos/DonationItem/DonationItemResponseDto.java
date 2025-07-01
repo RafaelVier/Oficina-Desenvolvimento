@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public record DonationItemResponseDto(
         UUID donationId,
-        ItemResponseDto item,
-        int quantity
+        UUID itemId,
+        Integer quantity
 ) { }

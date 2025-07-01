@@ -2,10 +2,11 @@ package com.oficina_dev.backend.models.Voluntary;
 
 import com.oficina_dev.backend.models.Donation.Donation;
 import com.oficina_dev.backend.models.Person.Person;
-import com.oficina_dev.backend.models.TransferDonation.TransferDonation;
+import com.oficina_dev.backend.models.Transfer.Transfer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 public class Voluntary {
 
     @Id
+    @Setter
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
@@ -45,7 +47,7 @@ public class Voluntary {
     private List<Donation> donations;
 
     @OneToMany(mappedBy = "voluntary")
-    private List<TransferDonation> transferDonations;
+    private List<Transfer> transfers;
 
     public Voluntary(Person person, String password, Boolean isActive) {
         this.setPassword(password);

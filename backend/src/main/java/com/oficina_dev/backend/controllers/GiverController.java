@@ -38,7 +38,7 @@ public class GiverController {
         return ResponseEntity.ok(giverResponseDto);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<GiverResponseDto> create(@RequestBody @Valid GiverRequestDto giverRequestDto) {
         logger.info("Creating new giver with person ID: {}", giverRequestDto.getPersonId());
         GiverResponseDto giverResponseDto = this.giverService.create(giverRequestDto);

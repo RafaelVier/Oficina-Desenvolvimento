@@ -18,7 +18,10 @@ public class ItemRequestDto {
     private String name;
 
     @NotBlank
-    private char sex;
+    private Character sex;
+
+    @NotBlank
+    private Integer quantity;
 
     @NotBlank
     private UUID categoryId;

@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class CategoryService {
 
-    private final String categoryNotFoundMessage = "Address not found";
+    private final String categoryNotFoundMessage = "Category not found";
 
     @Autowired
     private CategoryRepository categoryRepository;

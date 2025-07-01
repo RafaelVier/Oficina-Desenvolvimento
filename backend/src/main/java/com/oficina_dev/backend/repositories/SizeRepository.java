@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface SizeRepository extends JpaRepository<Size, UUID> {
 
+    public Size findByName(String name);
+
     public boolean existsByName(String name);
 
 }

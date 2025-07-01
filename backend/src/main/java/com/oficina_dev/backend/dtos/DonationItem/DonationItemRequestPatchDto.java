@@ -11,5 +11,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DonationItemRequestPatchDto {
     private UUID itemId;
-    int quantity;
+    private Integer quantity;
 }

@@ -2,7 +2,7 @@ package com.oficina_dev.backend.models.Receiver;
 
 import com.oficina_dev.backend.models.Person.Person;
 import com.oficina_dev.backend.models.ReceiverLimit.ReceiverLimit;
-import com.oficina_dev.backend.models.TransferDonation.TransferDonation;
+import com.oficina_dev.backend.models.Transfer.Transfer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +47,7 @@ public class Receiver {
     private List<ReceiverLimit> receiverLimits;
 
     @OneToMany(mappedBy = "receiver")
-    private List<TransferDonation> transferDonations;
+    private List<Transfer> transfers;
 
     public Receiver(String nif, Boolean isFit, Person person) {
         setNif(nif);
